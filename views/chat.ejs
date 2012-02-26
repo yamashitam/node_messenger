@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript">
+var socket = io.connect('http://localhost:3000/');
+var name;
+var dst;
+var room_name;
+socket.on('error', function(reason) {
+	console.log('Error: ' + reason);
+});
+socket.on('connect', function() {
+	name = document.getElementById('my name').innerHTML;
+	dst = document.getElementById('dst').innerHTML;
+	room_name = getRoomName(name, dst);
+	socket.emit('enter chatroom', room_name);
+});
+socket.on('message', function(msg) {
+	$('#receiveMsg').prepend($('<p>' + msg.replace(name+' : ', 'me : ') + '</p>'));
+});
+socket.on('get history', function(msg) {
+	var messages = msg.toString().split(',');
+	for(var i = messages.length-1; i >= 0; i--) {
+		$('#history').append($('<p>' + messages[i].replace(name+' : ', 'me : ') + '</p>'));
+	}
+});
+
+function SendMsg(dst) {
+	socket.emit('send message', document.getElementById('message').value, dst);
+}
+function GetHistory() {
+	socket.emit('get history', room_name);
+}
+function getRoomName(name, dst) {
+	if(name > dst)
+		return (dst + '_' + name);
+	else
+		return (name + '_' + dst);
+}
+</script>
+
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
+<style type="text/css">
+	body {
+		padding-top: 60px;
+		padding-left: 60px;
+	}
+</style>
+
+</HEAD>
+<BODY>
+
+<div class="topbar">
+	<div class="topbar-inner">
+		<div class="fill">
+			<div class="container">
+				<a class="brand" href="#">YamashitaMessenger</a>
+				<ul class="nav">
+				</ul>
+				<ul class="nav secondary-nav">
+					<li><a href="#"><div id="my name"><%= name %></div></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="containner-fluid">
+	<div class="row-fluid">
+		<h1>ヽ('ω')ﾉ三<div id="dst"><%= dst %></div>三ヽ('ω')ﾉ</h1>
+		<input type="text" id="message" value="" maxlength=140>
+		<input type="button" value="send" onclick="SendMsg('<%= dst %>')">
+		<div id="receiveMsg"></div>
+		<HR>
+		<div id="history"></div>
+		<input type="button" value="get history" onclick="GetHistory()">
+	</div>
+</div>
+
+</BODY>
+</HTML>
