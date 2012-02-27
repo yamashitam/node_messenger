@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript">
-var socket = io.connect('http://localhost:3000/');
+var socket = io.connect();
 var name;
 socket.on('error', function(reason) {
 	console.log('Error: ' + reason);
