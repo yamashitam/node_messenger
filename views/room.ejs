@@ -19,7 +19,7 @@ socket.on('update user list', function(users) {
 	var user_list = '';
 	for(var i = 0; i < users.length; i++) {
 		if(users[i]!=name)
-			user_list += '<p>' + users[i] + ' <input type="button" value="Start Chat" onclick="StartChat(\'' + users[i] + '\')"></p>';
+			user_list += '<p>' + users[i] + ' <input type="button" class="btn" value="Start Chat" onclick="StartChat(\'' + users[i] + '\')"></p>';
 	}
 	document.getElementById('userList').innerHTML = user_list;
 });
