@@ -1,0 +1,11 @@
+{
+	"name": "node_messenger",
+	"version": "0.1.0",
+	"dependencies": {
+		"express": "2.5.8",
+		"socket.io": "0.8.7",
+		"ejs": "0.6.1",
+		"connect": "1.8.5",
+		"redis-url": "0.1.0"
+	}
+}
