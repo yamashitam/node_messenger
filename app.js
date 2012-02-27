@@ -23,6 +23,7 @@ var port = process.env.PORT || 3000;
 app.listen(port);
 app.use(express.bodyParser());
 app.use(express.cookieParser());
+app.use(express.static(__dirname + '/public'));
 var store = new (connect.session.MemoryStore)();
 app.use(express.session({
 	store: store,
