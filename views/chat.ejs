@@ -27,7 +27,10 @@ socket.on('get history', function(msg) {
 });
 
 function SendMsg(dst) {
-	socket.emit('send message', document.getElementById('message').value, dst);
+	var msgText = document.getElementById('message');
+	socket.emit('send message', msgText.value, dst);
+	msgText.value = '';
+	msgText.focus();
 }
 function GetHistory() {
 	socket.emit('get history', room_name);
