@@ -193,7 +193,7 @@ io.sockets.on('connection', function(socket) {
 		redis_client.sismember(dst + '_room', roomname, function(error, result) {
 			if(error) console.log('Redis Error(on send message at sismember): ' + error);
 			else if(!result) {
-				clients[dst].send(shared_message);
+				if(clients[dst]) clients[dst].send(shared_message);
 			}
 		});
 		/* save message */
@@ -226,8 +226,8 @@ io.sockets.on('connection', function(socket) {
 					socket.broadcast.emit('update user list', result.toString().split(','));
 				}
 			});
+			clients[name] = null;
 			socket.leave(room_name);
-
 		}
 		/* leave from chatroom */
 		else if(room_name){
