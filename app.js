@@ -34,26 +34,20 @@ app.get('/', function(req, res) {
 	var name = req.cookies.name;
 	redis_client.nameExists(name, function(result) {
 		res.render('room.ejs', {
-			layout: false,
 			name: name
 		});
 	}, function() {
-		res.render('index.ejs', {
-			layout: false
-		});
+		res.render('index.ejs');
 	});
 });
 app.get('/register_page', function(req, res) {
-	res.render('register.ejs', {
-		layout: false
-	});
+	res.render('register.ejs');
 });
 app.post('/register', function(req, res) {
 	var name = req.body.name;
 	var pass = req.body.pass;
 	redis_client.nameExists(name, function(result) {
 		res.render('register.ejs', {
-			layout: false,
 			registerMsg: name + 'is already used'
 		});
 	}, function() {
@@ -61,9 +55,7 @@ app.post('/register', function(req, res) {
 		redis_client.set(name, JSON.stringify(user), function(err, result) {
 			if(err) console.log('Redis Error(on /register at set): ' + err);
 		});
-		res.render('index.ejs', {
-			layout: false
-		});
+		res.render('index.ejs');
 	});
 });
 app.post('/login', function(req, res) {
@@ -75,7 +67,6 @@ app.post('/login', function(req, res) {
 			else {
 				if(params.pass!=JSON.parse(result.toString())['pass']) {
 					res.render('index.ejs', {
-						layout: false,
 						loginMsg: params.name + '\'s password is incorrect'
 					});
 				}
@@ -83,7 +74,6 @@ app.post('/login', function(req, res) {
 					/* login successful */
 					res.cookie('name', params.name);
 					res.render('room.ejs', {
-						layout: false,
 						name: params.name
 					});
 				}
@@ -91,20 +81,16 @@ app.post('/login', function(req, res) {
 		});
 	}, function() {
 		res.render('index.ejs', {
-			layout: false,
 			loginMsg: params.name + ' is not registered'
 		});
 	});
 });
 app.get('/logout', function(req, res) {
 	res.cookie('name', '');
-	res.render('index.ejs', {
-		layout: false
-	});
+	res.render('index.ejs');
 });
 app.get('/chat', function(req, res) {
 	res.render('chat.ejs', {
-		layout: false,
 		name: req.cookies['name'],
 		dst: req.query.dst
 	});

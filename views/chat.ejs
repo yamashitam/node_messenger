@@ -1,7 +1,12 @@
-<HTML>
-<HEAD>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<h1>ヽ('ω')ﾉ三<div id="dst"><%= dst %></div>三ヽ('ω')ﾉ</h1>
+<form class="well">
+	<input type="text" class="xlarge" id="message" value="">
+	<input type="button" class="btn primary" value="send" onclick="SendMsg('<%= dst %>')">
+</form>
+<div id="receiveMsg"></div>
+<HR>
+<div id="history"></div>
+<input type="button" class="btn" value="get history" onclick="GetHistory()">
 <script type="text/javascript">
 var socket = io.connect();
 var name;
@@ -42,39 +47,3 @@ function getRoomName(name, dst) {
 		return (name + '_' + dst);
 }
 </script>
-
-<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
-<link rel="stylesheet" href="/application.css" />
-</HEAD>
-<BODY>
-
-<div class="topbar">
-	<div class="topbar-inner">
-		<div class="fill">
-			<div class="container">
-				<a class="brand" href="#">YamashitaMessenger</a>
-				<ul class="nav">
-				</ul>
-				<ul class="nav secondary-nav">
-					<li><a href="#"><div id="my name"><%= name %></div></a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="containner-fluid">
-	<div class="row-fluid">
-		<h1>ヽ('ω')ﾉ三<div id="dst"><%= dst %></div>三ヽ('ω')ﾉ</h1>
-		<form class="well">
-			<input type="text" class="xlarge" id="message" value="">
-			<input type="button" class="btn primary" value="send" onclick="SendMsg('<%= dst %>')">
-		</form>
-		<div id="receiveMsg"></div>
-		<HR>
-		<div id="history"></div>
-		<input type="button" class="btn" value="get history" onclick="GetHistory()">
-	</div>
-</div>
-
-</BODY>
-</HTML>
