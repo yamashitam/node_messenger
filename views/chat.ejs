@@ -27,7 +27,10 @@ socket.on('get history', function(msg) {
 });
 
 function SendMsg(dst) {
-	socket.emit('send message', document.getElementById('message').value, dst);
+	var msgText = document.getElementById('message');
+	socket.emit('send message', msgText.value, dst);
+	msgText.value = '';
+	msgText.focus();
 }
 function GetHistory() {
 	socket.emit('get history', room_name);
@@ -41,13 +44,7 @@ function getRoomName(name, dst) {
 </script>
 
 <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
-<style type="text/css">
-	body {
-		padding-top: 60px;
-		padding-left: 60px;
-	}
-</style>
-
+<link rel="stylesheet" href="/application.css" />
 </HEAD>
 <BODY>
 
@@ -68,12 +65,14 @@ function getRoomName(name, dst) {
 <div class="containner-fluid">
 	<div class="row-fluid">
 		<h1>ヽ('ω')ﾉ三<div id="dst"><%= dst %></div>三ヽ('ω')ﾉ</h1>
-		<input type="text" id="message" value="" maxlength=140>
-		<input type="button" value="send" onclick="SendMsg('<%= dst %>')">
+		<form class="well">
+			<input type="text" class="xlarge" id="message" value="">
+			<input type="button" class="btn primary" value="send" onclick="SendMsg('<%= dst %>')">
+		</form>
 		<div id="receiveMsg"></div>
 		<HR>
 		<div id="history"></div>
-		<input type="button" value="get history" onclick="GetHistory()">
+		<input type="button" class="btn" value="get history" onclick="GetHistory()">
 	</div>
 </div>
 

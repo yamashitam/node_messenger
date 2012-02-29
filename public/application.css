@@ -1,0 +1,8 @@
+body {
+	padding-top: 60px;
+	padding-left: 60px;
+}
+
+input[type="text"], input[type="password"] {
+    height: 25;
+}

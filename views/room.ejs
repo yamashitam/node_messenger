@@ -1,4 +1,4 @@
-<HTAM>
+<HTML>
 <HEAD>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
@@ -19,7 +19,7 @@ socket.on('update user list', function(users) {
 	var user_list = '';
 	for(var i = 0; i < users.length; i++) {
 		if(users[i]!=name)
-			user_list += '<p>' + users[i] + ' <input type="button" value="Start Chat" onclick="StartChat(\'' + users[i] + '\')"></p>';
+			user_list += '<p>' + users[i] + ' <input type="button" class="btn" value="Start Chat" onclick="StartChat(\'' + users[i] + '\')"></p>';
 	}
 	document.getElementById('userList').innerHTML = user_list;
 });
@@ -30,13 +30,7 @@ function StartChat(dst) {
 </script>
 
 <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
-<style type="text/css">
-	body {
-		padding-top: 60px;
-		padding-left: 60px;
-	}
-</style>
-
+<link rel="stylesheet" href="/application.css" />
 </HEAD>
 <BODY>
 

@@ -9,12 +9,21 @@ redis_client.on('error', function (err) {
 	console.log('Error: ' + err);
 });
 
+redis_client.nameExists = function(name, trueCallback, falseCallback) {
+	this.exists(name, function(error, result) {
+		if (error) console.log('Redis Error (at exists): ' + error);
+		else if (result) trueCallback.call(result);
+		else falseCallback.call();
+	});
+}
+
 /* express */
 var app = express.createServer();
 var port = process.env.PORT || 3000;
 app.listen(port);
 app.use(express.bodyParser());
 app.use(express.cookieParser());
+app.use(express.static(__dirname + '/public'));
 var store = new (connect.session.MemoryStore)();
 app.use(express.session({
 	store: store,
@@ -23,19 +32,15 @@ app.use(express.session({
 }));
 app.get('/', function(req, res) {
 	var name = req.cookies.name;
-	redis_client.exists(name, function(error, result) {
-		if(error) console.log('Redis Error(on / at exists): ' + error);
-		else if(result) {
-			res.render('room.ejs', {
-				layout: false,
-				name: name
-			});
-		}
-		else {
-			res.render('index.ejs', {
-				layout: false
-			});
-		}
+	redis_client.nameExists(name, function(result) {
+		res.render('room.ejs', {
+			layout: false,
+			name: name
+		});
+	}, function() {
+		res.render('index.ejs', {
+			layout: false
+		});
 	});
 });
 app.get('/register_page', function(req, res) {
@@ -46,59 +51,49 @@ app.get('/register_page', function(req, res) {
 app.post('/register', function(req, res) {
 	var name = req.body.name;
 	var pass = req.body.pass;
-	redis_client.exists(name, function(err, result) {
-		if(err) console.log('Redis Error(on /register at exists): ' + err);
-		else if(result) {
-			res.render('register.ejs', {
-				layout: false,
-				registerMsg: name + 'is already used'
-			});
-		}
-		else {
-			var user = {"name": name,
-				"pass": pass
-			}
-			redis_client.set(name, JSON.stringify(user), function(err, result) {
-				if(err) console.log('Redis Error(on /register at set): ' + err);
-			});
-			res.render('index.ejs', {
-				layout: false
-			});
-		}
+	redis_client.nameExists(name, function(result) {
+		res.render('register.ejs', {
+			layout: false,
+			registerMsg: name + 'is already used'
+		});
+	}, function() {
+		var user = {"name": name, "pass": pass}
+		redis_client.set(name, JSON.stringify(user), function(err, result) {
+			if(err) console.log('Redis Error(on /register at set): ' + err);
+		});
+		res.render('index.ejs', {
+			layout: false
+		});
 	});
 });
 app.post('/login', function(req, res) {
 	var params = req.body;
 	var pass = req.body.pass;
-	redis_client.exists(params.name, function(err, result) {
-		if(err) console.log('Redis Error(on /login at exists): ' + err);
-		else if(!result) {
-			res.render('index.ejs', {
-				layout: false,
-				loginMsg: params.name + ' is not registered'
-			});
-		}
-		else {
-			redis_client.get(params.name, function(err, result) {
-				if(err) console.log('Redis Error(on /login get at login): ' + err)
-				else {
-					if(params.pass!=JSON.parse(result.toString())['pass']) {
-						res.render('index.ejs', {
-							layout: false,
-							loginMsg: params.name + '\'s password is incorrect'
-						});
-					}
-					/* login successful */
-					else {
-						res.cookie('name', params.name);
-						res.render('room.ejs', {
-							layout: false,
-							name: params.name
-						});
-					}
+	redis_client.nameExists(params.name, function(result) {
+		redis_client.get(params.name, function(err, result) {
+			if(err) console.log('Redis Error(on /login get at login): ' + err)
+			else {
+				if(params.pass!=JSON.parse(result.toString())['pass']) {
+					res.render('index.ejs', {
+						layout: false,
+						loginMsg: params.name + '\'s password is incorrect'
+					});
 				}
-			});
-		}
+				else {
+					/* login successful */
+					res.cookie('name', params.name);
+					res.render('room.ejs', {
+						layout: false,
+						name: params.name
+					});
+				}
+			}
+		});
+	}, function() {
+		res.render('index.ejs', {
+			layout: false,
+			loginMsg: params.name + ' is not registered'
+		});
 	});
 });
 app.get('/logout', function(req, res) {
