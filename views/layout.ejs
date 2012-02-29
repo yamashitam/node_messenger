@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
+<link rel="stylesheet" href="/application.css" />
+</HEAD>
+<BODY>
+
+<div class="topbar">
+	<div class="topbar-inner">
+		<div class="fill">
+			<div class="container">
+				<a class="brand" href="#">YamashitaMessenger</a>
+				<ul class="nav">
+					<% if (typeof name !== 'undefined') { %><li><a href="/logout">logout</a></li><% } %>
+				</ul>
+				<ul class="nav secondary-nav">
+					<% if (typeof name !== 'undefined') { %><li><a href="#"><div id="my name"><%= name %></div></a></li><% } %>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="containner-fluid">
+	<div class="row-fluid">
+		<%- body %>
+	</div>
+</div>
+
+</BODY>
+</HTML>

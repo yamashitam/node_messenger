@@ -1,37 +1,10 @@
-<HTML>
-<HEAD>
-<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
-<link rel="stylesheet" href="/application.css" />
-</HEAD>
-<BODY>
-
-<div class="topbar">
-	<div class="topbar-inner">
-		<div class="fill">
-			<div class="container">
-				<a class="brand" href="#">YamashitaMessenger</a>
-				<ul class="nav">
-				</ul>
-				<ul class="nav secondary-nav">
-				</ul>
-			</div>
-		</div>
-	</div>
+<h1>ヽ('ω')ﾉ三ヽ('ω')ﾉ</h1>
+<div id="login form">
+<p><a href="register_page">register</a></p>
+	<form method="POST" action="/login">
+		<input type="text" name="name" value="">
+		<input type="password" name="pass" value="">
+		<input type="submit" class="btn primary" value="login">
+	</form>
+	<p><%= (typeof loginMsg === 'undefined')?'':loginMsg %></p>
 </div>
-<div class="containner-fluid">
-	<div class="row-fluid">
-		<h1>ヽ('ω')ﾉ三ヽ('ω')ﾉ</h1>
-		<div id="login form">
-		<p><a href="register_page">register</a></p>
-			<form method="POST" action="/login">
-				<input type="text" name="name" value="">
-				<input type="password" name="pass" value="">
-				<input type="submit" class="btn primary" value="login">
-			</form>
-			<p><%= (typeof loginMsg === 'undefined')?'':loginMsg %></p>
-		</div>
-	</div>
-</div>
-
-</BODY>
-</HTML>
