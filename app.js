@@ -4,7 +4,8 @@ var redis = require('redis-url');
 var connect = require('connect');
 
 /* redis */
-var redis_client = redis.createClient(process.env.REDISTOGO_URL);
+var redis_url = process.env.REDISTOGO_URL || 'redis://127.0.0.1:6379'
+var redis_client = redis.createClient(redis_url);
 redis_client.on('error', function (err) {
 	console.log('Error: ' + err);
 });
